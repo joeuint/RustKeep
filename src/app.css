@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply bg-neutral-900 text-gray-200
+}
+
+input[type=password] {
+    @apply bg-neutral-700 p-1 rounded-lg
+}
+
+input[type=number] {
+    @apply bg-neutral-700 p-1 rounded-lg
+}
