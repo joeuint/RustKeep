@@ -1,6 +1,5 @@
 use super::crypto::{decrypt_data, encrypt_data};
 use super::random::secure_random_bytes;
-use crate::structs::Database;
 use argon2::{Algorithm, ParamsBuilder, Version};
 use std::fs::OpenOptions;
 use std::io::{ErrorKind, Read, Write};
@@ -136,13 +135,4 @@ pub fn read_database(path: &String, password: &[u8]) -> Result<String, String> {
     };
 
     return Ok(as_utf8.to_string());
-}
-
-pub fn parse_database(raw: String) -> Result<Database, String> {
-    let parsed: Database = match serde_json::from_str(raw.as_str()) {
-        Ok(parsed_data) => parsed_data,
-        Err(error) => return Err(format!("{:?}", error)),
-    };
-
-    return Ok(parsed);
 }

@@ -13,3 +13,7 @@ input[type=password] {
 input[type=number] {
     @apply bg-neutral-700 p-1 rounded-lg
 }
+
+.ellipsis {
+    @apply text-ellipsis overflow-hidden whitespace-nowrap
+}

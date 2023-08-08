@@ -4,7 +4,7 @@ export type DatabaseEntry = {
   url: string;
   username: string;
   password: string;
-  notes: string;
+  notes?: string;
   creation: number;
 };
 

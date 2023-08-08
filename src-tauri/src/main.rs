@@ -1,7 +1,10 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use rust_keep::structs::Database;
+use rust_keep::structs::Entry;
 use rust_keep::utils::database;
+use rust_keep::utils::dbops;
 use rust_keep::utils::generator;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -48,6 +51,11 @@ fn open_database(path: &str, password: &str) -> Result<String, String> {
     return database::read_database(&stringed_path, password.as_bytes());
 }
 
+#[tauri::command]
+fn add_entry(database: Database, entry: Entry) -> Database {
+    return dbops::add_entry(&database, &entry);
+}
+
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
@@ -55,7 +63,8 @@ fn main() {
             create_database,
             gen_passphrase,
             gen_password,
-            open_database
+            open_database,
+            add_entry
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

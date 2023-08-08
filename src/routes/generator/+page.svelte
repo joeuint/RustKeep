@@ -1,5 +1,8 @@
 <script lang="ts">
+  import type { Database } from '$types/Database';
   import { invoke } from '@tauri-apps/api/tauri';
+  import { getContext } from 'svelte';
+  import type { Writable } from 'svelte/store';
 
   let passType: 'phrase' | 'word';
   let generatedType: 'phrase' | 'word';
@@ -30,6 +33,8 @@
         break;
     }
   }
+
+  const database = getContext<Writable<Database>>('database');
 </script>
 
 <main class="flex-col flex items-center pt-20">

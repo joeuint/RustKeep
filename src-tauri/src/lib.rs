@@ -19,7 +19,7 @@ pub mod structs {
         pub url: String,
         pub username: String,
         pub password: String,
-        pub notes: String,
+        pub notes: Option<String>,
         pub creation: i64,
     }
 }
