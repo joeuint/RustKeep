@@ -14,6 +14,10 @@ input[type=number] {
     @apply bg-neutral-700 p-1 rounded-lg
 }
 
+input[type=text] {
+    @apply bg-neutral-700 p-1 rounded-lg
+}
+
 .ellipsis {
     @apply text-ellipsis overflow-hidden whitespace-nowrap
 }

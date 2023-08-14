@@ -14,17 +14,16 @@
     goto('/');
   }
 
-  const test_entry: DatabaseEntry = {
-    creation: 289329,
-    name: 'Twitch',
-    password: 'password',
-    url: 'twitch.tv',
-    username: 'popcornstriker',
-    uuid: '2d46160e-8230-4012-89a6-081170abac01',
+  const current_entry: DatabaseEntry = {
+    creation: 0,
+    name: '',
+    password: '',
+    url: '',
+    username: '',
+    uuid: '',
   };
 
   async function submitEntry(entry: DatabaseEntry) {
-    modal.showModal();
     database.set(
       await invoke('add_entry', {
         database: $database,
@@ -35,7 +34,24 @@
 </script>
 
 {#if $database}
-  <Dialog bind:modal title="Entry Wizard">hi</Dialog>
+  <Dialog bind:modal title="Entry Wizard">
+    <form class="flex flex-col gap-y-2">
+      <p class="text-lg">Name:</p>
+      <input bind:value={current_entry.name} type="text" name="name" id="entryName">
+      <p class="text-lg">Username:</p>
+      <input bind:value={current_entry.username} type="text" name="username" id="entryUsername">
+      <p class="text-lg">URL:</p>
+      <input bind:value={current_entry.url} type="text" name="url" id="entryUrl">
+      <p class="text-lg">Password:</p>
+      <input bind:value={current_entry.password} type="password" name="password" id="entryPassword" class="mb-4">
+      <input type="submit" value="Add" class="bg-neutral-700 p-2 text-lg rounded-lg font-semibold cursor-pointer" on:click={() => {
+        submitEntry(current_entry);
+      }}>
+      <button class="bg-red-700 p-2 text-lg rounded-lg font-semibold" on:click={() => {
+        modal.close();
+      }}>Close</button>
+    </form>
+  </Dialog>
   <div class="grid grid-cols-3 pt-10 pb-10 px-4 h-[calc(100vh-3rem)] gap-x-8">
     <div
       id="sidebar"
@@ -66,7 +82,7 @@
         <button
           class="bg-neutral-800 p-2 rounded-lg font-semibold text-lg"
           on:click={() => {
-            submitEntry(test_entry);
+            modal.showModal();
           }}>Add Entry</button
         >
       </div>
