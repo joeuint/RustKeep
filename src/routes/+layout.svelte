@@ -19,7 +19,7 @@
 
   // Ask the user if they want to quit with unsaved changes
   getCurrent().onCloseRequested(async (event) => {
-    if (unsaved) {
+    if ($unsaved) {
       const quitAnyways = await confirm(
         'Your changes are not saved. Are you sure you would like to quit?',
         {
