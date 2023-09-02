@@ -37,19 +37,48 @@
   <Dialog bind:modal title="Entry Wizard">
     <form class="flex flex-col gap-y-2">
       <p class="text-lg">Name:</p>
-      <input bind:value={current_entry.name} type="text" name="name" id="entryName">
+      <input
+        bind:value={current_entry.name}
+        type="text"
+        name="name"
+        id="entryName"
+      />
       <p class="text-lg">Username:</p>
-      <input bind:value={current_entry.username} type="text" name="username" id="entryUsername">
+      <input
+        bind:value={current_entry.username}
+        type="text"
+        name="username"
+        id="entryUsername"
+      />
       <p class="text-lg">URL:</p>
-      <input bind:value={current_entry.url} type="text" name="url" id="entryUrl">
+      <input
+        bind:value={current_entry.url}
+        type="text"
+        name="url"
+        id="entryUrl"
+      />
       <p class="text-lg">Password:</p>
-      <input bind:value={current_entry.password} type="password" name="password" id="entryPassword" class="mb-4">
-      <input type="submit" value="Add" class="bg-neutral-700 p-2 text-lg rounded-lg font-semibold cursor-pointer" on:click={() => {
-        submitEntry(current_entry);
-      }}>
-      <button class="bg-red-700 p-2 text-lg rounded-lg font-semibold" on:click={() => {
-        modal.close();
-      }}>Close</button>
+      <input
+        bind:value={current_entry.password}
+        type="password"
+        name="password"
+        id="entryPassword"
+        class="mb-4"
+      />
+      <input
+        type="submit"
+        value="Add"
+        class="bg-neutral-700 p-2 text-lg rounded-lg font-semibold cursor-pointer"
+        on:click={() => {
+          submitEntry(current_entry);
+        }}
+      />
+      <button
+        class="bg-red-700 p-2 text-lg rounded-lg font-semibold"
+        on:click={() => {
+          modal.close();
+        }}>Close</button
+      >
     </form>
   </Dialog>
   <div class="grid grid-cols-3 pt-10 pb-10 px-4 h-[calc(100vh-3rem)] gap-x-8">
