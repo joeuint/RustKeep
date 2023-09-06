@@ -41,7 +41,7 @@ fn create_database(path: &str, password: &str) {
 }
 
 #[tauri::command]
-fn open_database(path: &str, password: &str) -> Result<String, String> {
+fn open_database(path: &str, password: &str) -> Result<(String, [u8; 32]), String> {
     let stringed_path = path.to_string();
     println!(
         "{:?}",
@@ -56,6 +56,11 @@ fn add_entry(database: Database, entry: Entry) -> Database {
     return dbops::add_entry(&database, &entry);
 }
 
+#[tauri::command]
+fn save_database(path: &str, secret_key: Vec<u8>) {
+    println!("{}, {:?}", path, secret_key)
+}
+
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
@@ -64,7 +69,8 @@ fn main() {
             gen_passphrase,
             gen_password,
             open_database,
-            add_entry
+            add_entry,
+            save_database
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

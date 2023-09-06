@@ -73,7 +73,7 @@ pub fn create_database(path: String, password: &[u8]) {
     }
 }
 
-pub fn read_database(path: &String, password: &[u8]) -> Result<String, String> {
+pub fn read_database(path: &String, password: &[u8]) -> Result<(String, [u8; 32]), String> {
     let file_result = OpenOptions::new().read(true).open(path);
 
     let mut file = match file_result {
@@ -134,5 +134,5 @@ pub fn read_database(path: &String, password: &[u8]) -> Result<String, String> {
         Err(error) => return Err(format!("Failed to decode UTF-8 data: {:?}", error)),
     };
 
-    return Ok(as_utf8.to_string());
+    return Ok((as_utf8.to_string(), derived_key));
 }

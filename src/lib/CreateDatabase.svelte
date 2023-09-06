@@ -12,6 +12,7 @@
 
   const alerts = getContext<Writable<Alert>>('alerts');
   const database = getContext<Writable<Database>>('database');
+  const secretKey = getContext<Writable<ArrayBuffer>>('secretKey');
 
   function stringTime(seconds: number) {
     const minute = 60;
@@ -99,7 +100,7 @@
     });
 
     if (path != null) {
-      const data = await invoke<string>('open_database', {
+      const data = await invoke<[string, ArrayBuffer]>('open_database', {
         path: path,
         password: password,
       }).catch((e) => {
@@ -113,8 +114,9 @@
 
       if (data == null) return;
 
-      const parse: Database = JSON.parse(data);
+      const parse: Database = JSON.parse(data[0]);
 
+      secretKey.set(data[1]);
       database.set(parse);
 
       goto('/database');

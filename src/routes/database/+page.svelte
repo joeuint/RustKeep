@@ -5,13 +5,41 @@
   import type { Writable } from 'svelte/store';
   import type { DatabaseEntry } from '$types/Database';
   import { invoke } from '@tauri-apps/api/tauri';
+  import { type } from '@tauri-apps/api/os';
   import Dialog from '$lib/Dialog.svelte';
+  import { open } from '@tauri-apps/api/dialog';
 
-  export let modal: HTMLDialogElement;
+  let modal: HTMLDialogElement;
+
+  const secretKey = getContext<Writable<Uint8Array>>('secretKey');
 
   const database = getContext<Writable<Database>>('database');
   if (!$database) {
     goto('/');
+  }
+
+  async function keyHandler(e: KeyboardEvent) {
+    // User is on a potato
+    const isMacOS = (await type()) == 'Darwin';
+
+    if ((isMacOS && e.metaKey) || (!isMacOS && e.ctrlKey)) {
+      if (e.key == 's') {
+        const path = await open({
+          filters: [
+            {
+              name: 'Rust Keep Database',
+              extensions: ['rkdb'],
+            },
+          ],
+        });
+
+        console.log(path, $secretKey);
+        await invoke('save_database', {
+          path: path,
+          secretKey: $secretKey,
+        });
+      }
+    }
   }
 
   const current_entry: DatabaseEntry = {
@@ -118,3 +146,5 @@
     </div>
   </div>
 {/if}
+
+<svelte:window on:keydown={keyHandler} />

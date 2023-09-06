@@ -61,7 +61,7 @@
         "unmaximize": false,
         "unminimize": false
       },
-      "globalShortcut": {
+      "os": {
         "all": true
       }
     },
