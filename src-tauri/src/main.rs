@@ -35,9 +35,7 @@ fn gen_password(amount: u16) -> String {
 
 #[tauri::command]
 fn create_database(path: &str, password: &str) {
-    let stringed_path = path.to_string();
-
-    database::create_database(stringed_path, password.as_bytes());
+    database::create_database(path, password.as_bytes(), None);
 }
 
 #[tauri::command]
@@ -57,8 +55,8 @@ fn add_entry(database: Database, entry: Entry) -> Database {
 }
 
 #[tauri::command]
-fn save_database(path: &str, secret_key: Vec<u8>) {
-    println!("{}, {:?}", path, secret_key)
+fn save_database(path: &str, database: &str, password: &str) {
+    database::create_database(path, password.as_bytes(), Some(database))
 }
 
 fn main() {

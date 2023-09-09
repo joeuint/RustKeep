@@ -12,7 +12,7 @@
 
   const alerts = getContext<Writable<Alert>>('alerts');
   const database = getContext<Writable<Database>>('database');
-  const secretKey = getContext<Writable<ArrayBuffer>>('secretKey');
+  const passwordStore = getContext<Writable<string>>('password');
 
   function stringTime(seconds: number) {
     const minute = 60;
@@ -116,7 +116,7 @@
 
       const parse: Database = JSON.parse(data[0]);
 
-      secretKey.set(data[1]);
+      passwordStore.set(password);
       database.set(parse);
 
       goto('/database');

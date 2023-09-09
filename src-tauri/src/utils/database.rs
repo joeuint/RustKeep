@@ -12,10 +12,10 @@ const SKELETON_ENCRYPTION_DATA: &str = r#"{"version": "0.1","root": {"entries": 
 const DATABASE_WATERMARK: [u8; 8] = [0x52, 0x55, 0x53, 0x54, 0x4B, 0x45, 0x45, 0x50];
 const MIN_SIZE: usize = 52;
 
-pub fn create_database(path: String, password: &[u8]) {
+pub fn create_database(path: &str, password: &[u8], data: Option<&str>) {
     // Open file safely and panic if it alerady exists
     // TODO: Show error message instead of outright panicing!
-    let file_result = OpenOptions::new().write(true).create_new(true).open(path);
+    let file_result = OpenOptions::new().write(true).create(true).open(path);
 
     let mut file = match file_result {
         Ok(file) => file,
@@ -54,7 +54,11 @@ pub fn create_database(path: String, password: &[u8]) {
     }
 
     // We encrypt a 0x00 byte just so we have something to encrypt
-    let (enc_result, nonce) = encrypt_data(&derived_key, SKELETON_ENCRYPTION_DATA.as_bytes());
+    let (enc_result, nonce) = encrypt_data(
+        &derived_key,
+        data.unwrap_or_else(|| return SKELETON_ENCRYPTION_DATA)
+            .as_bytes(),
+    );
     let cipher_text = match enc_result {
         Ok(cipher_text) => cipher_text,
         Err(error) => panic!("Error encrypting data: {:?}", error),

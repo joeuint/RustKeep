@@ -12,12 +12,12 @@
   const alerts = writable<Alert>();
   const database = writable<Database>();
   const unsaved = writable<boolean>(false);
-  const secretKey = writable<Uint8Array>();
+  const password = writable<string>();
 
   setContext('alerts', alerts);
   setContext('database', database);
   setContext('unsaved', unsaved);
-  setContext('secretKey', secretKey);
+  setContext('password', password);
 
   // Ask the user if they want to quit with unsaved changes
   getCurrent().onCloseRequested(async (event) => {

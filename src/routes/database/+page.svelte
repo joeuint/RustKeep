@@ -11,7 +11,7 @@
 
   let modal: HTMLDialogElement;
 
-  const secretKey = getContext<Writable<Uint8Array>>('secretKey');
+  const password = getContext<Writable<string>>('password');
 
   const database = getContext<Writable<Database>>('database');
   if (!$database) {
@@ -19,7 +19,7 @@
   }
 
   async function keyHandler(e: KeyboardEvent) {
-    // User is on a potato
+    // User is on Mac
     const isMacOS = (await type()) == 'Darwin';
 
     if ((isMacOS && e.metaKey) || (!isMacOS && e.ctrlKey)) {
@@ -33,10 +33,11 @@
           ],
         });
 
-        console.log(path, $secretKey);
+        console.log(path, $password);
         await invoke('save_database', {
           path: path,
-          secretKey: $secretKey,
+          database: JSON.stringify($database),
+          password: $password,
         });
       }
     }
