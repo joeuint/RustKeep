@@ -110,7 +110,7 @@
       >
     </form>
   </Dialog>
-  <div class="grid grid-cols-3 pt-10 pb-10 px-4 h-[calc(100vh-3rem)] gap-x-8">
+  <div class="grid grid-cols-3 pt-10 pb-10 px-4 h-[100vh] pb-20 gap-x-8">
     <div
       id="sidebar"
       class="bg-neutral-800 sm:w-5/6 rounded-lg p-2 overflow-y-scroll"
