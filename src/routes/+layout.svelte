@@ -10,9 +10,9 @@
   import { confirm } from '@tauri-apps/api/dialog';
 
   const alerts = writable<Alert>();
-  const database = writable<Database>();
+  const database = writable<Database | null>();
   const unsaved = writable<boolean>(false);
-  const password = writable<string>();
+  const password = writable<string | null>();
 
   setContext('alerts', alerts);
   setContext('database', database);

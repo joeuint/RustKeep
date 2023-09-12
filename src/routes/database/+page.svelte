@@ -11,9 +11,9 @@
 
   let modal: HTMLDialogElement;
 
-  const password = getContext<Writable<string>>('password');
+  const password = getContext<Writable<string | null>>('password');
 
-  const database = getContext<Writable<Database>>('database');
+  const database = getContext<Writable<Database | null>>('database');
   if (!$database) {
     goto('/');
   }
@@ -39,6 +39,13 @@
           database: JSON.stringify($database),
           password: $password,
         });
+      }
+
+      if (e.key == 'l') {
+        database.set(null);
+        password.set(null);
+
+        goto('/');
       }
     }
   }
