@@ -7,7 +7,7 @@
   import { invoke } from '@tauri-apps/api/tauri';
   import { type } from '@tauri-apps/api/os';
   import Dialog from '$lib/Dialog.svelte';
-  import { open } from '@tauri-apps/api/dialog';
+  import { open, confirm } from '@tauri-apps/api/dialog';
 
   let modal: HTMLDialogElement;
 
@@ -35,20 +35,36 @@
           ],
         });
 
-        console.log(path, $password);
         await invoke('save_database', {
           path: path,
           database: JSON.stringify($database),
-          password: $password,
+          password: $passwordStore,
         });
+
+        unsaved.set(false);
+      }
+    }
+
+    if (e.key == 'l') {
+      if ($unsaved) {
+        const quitAnyways = await confirm(
+          'Your changes are not saved. Are you sure you would like to lock the database?',
+          {
+            title: 'Unsaved Database',
+            type: 'warning',
+          }
+        );
+
+        if (!quitAnyways) {
+          return;
+        }
       }
 
-      if (e.key == 'l') {
-        database.set(null);
-        password.set(null);
+      database.set(null);
+      passwordStore.set(null);
+      unsaved.set(false);
 
-        goto('/');
-      }
+      goto('/');
     }
   }
 
@@ -68,6 +84,8 @@
         entry: entry,
       })
     );
+
+    unsaved.set(true);
   }
 </script>
 
@@ -119,7 +137,7 @@
       >
     </form>
   </Dialog>
-  <div class="grid grid-cols-3 pt-10 pb-10 px-4 h-[100vh] pb-20 gap-x-8">
+  <div class="grid grid-cols-3 pt-10 pb-10 px-4 h-[100vh] gap-x-8">
     <div
       id="sidebar"
       class="bg-neutral-800 sm:w-5/6 rounded-lg p-2 overflow-y-scroll"
