@@ -11,7 +11,9 @@
 
   let modal: HTMLDialogElement;
 
-  const password = getContext<Writable<string | null>>('password');
+  const passwordStore = getContext<Writable<string | null>>('password');
+
+  const unsaved = getContext<Writable<boolean>>('unsaved');
 
   const database = getContext<Writable<Database | null>>('database');
   if (!$database) {

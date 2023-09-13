@@ -10,9 +10,9 @@
   import type { Database } from '$types/Database';
   import { goto } from '$app/navigation';
 
-  const alerts = getContext<Writable<Alert>>('alerts');
-  const database = getContext<Writable<Database>>('database');
-  const passwordStore = getContext<Writable<string>>('password');
+  const alerts = getContext<Writable<Alert | null>>('alerts');
+  const database = getContext<Writable<Database | null>>('database');
+  const passwordStore = getContext<Writable<string | null>>('password');
 
   function stringTime(seconds: number) {
     const minute = 60;
