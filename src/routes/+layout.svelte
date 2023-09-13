@@ -9,7 +9,7 @@
   import { getCurrent } from '@tauri-apps/api/window';
   import { confirm } from '@tauri-apps/api/dialog';
 
-  const alerts = writable<Alert>();
+  const alerts = writable<Alert | null>();
   const database = writable<Database | null>();
   const unsaved = writable<boolean>(false);
   const password = writable<string | null>();
