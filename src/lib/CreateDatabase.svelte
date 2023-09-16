@@ -3,7 +3,7 @@
 
   import { save, open } from '@tauri-apps/api/dialog';
   import { invoke } from '@tauri-apps/api/tauri';
-  import { getContext } from 'svelte';
+  import { getContext, onMount } from 'svelte';
   import zxcvbn from 'zxcvbn';
   import type { Writable } from 'svelte/store';
   import type { Alert } from '$types/Alert';
@@ -57,12 +57,16 @@
 
   let password: string = '';
 
+  let databasePassword: string = '';
+
   let entropy: string | number;
 
-  let modal: HTMLDialogElement;
+  let databaseCreationModal: HTMLDialogElement;
+
+  let databaseAuthenticationModal: HTMLDialogElement;
 
   async function newDatabase() {
-    modal.showModal();
+    databaseCreationModal.showModal();
   }
 
   function updateEntropy() {
@@ -85,7 +89,7 @@
     if (path != null) {
       await invoke('create_database', { path: path, password: password });
       password = '';
-      modal.close();
+      databaseCreationModal.close();
     }
   }
 
@@ -102,7 +106,7 @@
     if (path != null) {
       const data = await invoke<[string, ArrayBuffer]>('open_database', {
         path: path,
-        password: password,
+        password: databasePassword,
       }).catch((e) => {
         alerts.set({
           severity: 'error',
@@ -124,7 +128,7 @@
   }
 </script>
 
-<Dialog bind:modal title="Create Database">
+<Dialog bind:modal={databaseCreationModal} title="Create Database">
   <p>Please enter a strong master password to encrypt all of your data!</p>
   <input type="password" on:input={updateEntropy} bind:value={password} />
   <p>
@@ -135,7 +139,7 @@
   <div class="flex">
     <button
       type="submit"
-      on:click={() => modal.close()}
+      on:click={() => databaseCreationModal.close()}
       class="bg-red-700 p-1 w-1/3 text-lg font-semibold mx-auto rounded-lg"
       >Close</button
     >
@@ -148,11 +152,38 @@
   </div>
 </Dialog>
 
+<Dialog
+  bind:modal={databaseAuthenticationModal}
+  title="Authentication Required"
+>
+  <p>A password is required to decrypt the database:</p>
+  <input
+    type="password"
+    on:input={updateEntropy}
+    bind:value={databasePassword}
+  />
+  <div class="flex">
+    <button
+      type="submit"
+      on:click={() => databaseAuthenticationModal.close()}
+      class="bg-red-700 p-1 w-1/3 text-lg font-semibold mx-auto rounded-lg"
+      >Close</button
+    >
+    <button
+      type="submit"
+      on:click={openDatabaseFile}
+      class="bg-green-700 p-1 w-1/3 text-lg font-semibold mx-auto rounded-lg"
+      >Create</button
+    >
+  </div>
+</Dialog>
+
 <div class="flex gap-x-5">
   <button
     type="submit"
     class="bg-neutral-800 p-2 rounded-lg font-semibold text-lg"
-    on:click={openDatabaseFile}>Open Database</button
+    on:click={() => databaseAuthenticationModal.showModal()}
+    >Open Database</button
   >
   <button
     type="submit"
